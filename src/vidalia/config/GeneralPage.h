@@ -51,6 +51,8 @@ private slots:
   void browseProxyExecutable();
   /** Initiate an immediate check for software updates. */
   void updateNow();
+  /** Disable some actions, if we already have tor instance. */
+  void torAlreadyRunning();
 
 private:
   /** Displays a file dialog allowing the user to browse for an executable

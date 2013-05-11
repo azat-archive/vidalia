@@ -38,6 +38,8 @@ GeneralPage::GeneralPage(QWidget *parent)
   connect(ui.btnBrowseProxyExecutable, SIGNAL(clicked()),
           this, SLOT(browseProxyExecutable()));
   connect(ui.btnUpdateNow, SIGNAL(clicked()), this, SLOT(updateNow()));
+  connect(ui.chkTorIsAlreadyRunning, SIGNAL(clicked()),
+          this, SLOT(torAlreadyRunning()));
 
 #if !defined(Q_OS_WIN32)
   /* Hide platform specific features */
@@ -123,6 +125,7 @@ GeneralPage::save(QString &errmsg)
 
   _torSettings->setExecutable(torExecutable);
   _vidaliaSettings->setRunTorAtStart(ui.chkRunTorAtVidaliaStartup->isChecked());
+  _vidaliaSettings->setTorIsAlreadyRunning(ui.chkTorIsAlreadyRunning->isChecked());
   _vidaliaSettings->setRunVidaliaOnBoot(
     ui.chkRunVidaliaAtSystemStartup->isChecked());
   _vidaliaSettings->setRunProxyAtStart(
@@ -139,11 +142,14 @@ GeneralPage::load()
 
   ui.lineTorExecutable->setText(_torSettings->getExecutable());
   ui.chkRunTorAtVidaliaStartup->setChecked(_vidaliaSettings->runTorAtStart());
+  ui.chkTorIsAlreadyRunning->setChecked(_vidaliaSettings->torIsAlreadyRunning());
 
   ui.lineProxyExecutable->setText(_vidaliaSettings->getProxyExecutable());
   ui.lineProxyExecutableArguments->setText(
     _vidaliaSettings->getProxyExecutableArguments());
   ui.chkRunProxyAtTorStartup->setChecked(_vidaliaSettings->runProxyAtStart());
+
+  torAlreadyRunning();
 }
 
 void
@@ -152,3 +158,18 @@ GeneralPage::updateNow()
   emit checkForUpdates();
 }
 
+void
+GeneralPage::torAlreadyRunning()
+{
+  if (ui.chkTorIsAlreadyRunning->isChecked()) {
+    ui.chkRunVidaliaAtSystemStartup->setEnabled(false);
+    ui.lineTorExecutable->setEnabled(false);
+    ui.btnBrowseTorExecutable->setEnabled(false);
+  } else {
+    ui.chkRunVidaliaAtSystemStartup->setEnabled(true);
+    ui.lineTorExecutable->setEnabled(true);
+    ui.btnBrowseTorExecutable->setEnabled(true);
+  }
+
+  _vidaliaSettings->setTorIsAlreadyRunning(ui.chkTorIsAlreadyRunning->isChecked());
+}

@@ -27,6 +27,7 @@
 #define SETTING_LANGUAGE            "LanguageCode"
 #define SETTING_STYLE               "InterfaceStyle"
 #define SETTING_RUN_TOR_AT_START    "RunTorAtStart"
+#define SETTING_TOR_IS_ALREADY_RUNNING    "TorIsAlreadyRunning"
 #define SETTING_DATA_DIRECTORY      "DataDirectory"
 #define SETTING_SHOW_MAINWINDOW_AT_START  "ShowMainWindowAtStart"
 #define SETTING_BROWSER_EXECUTABLE        "BrowserExecutable"
@@ -137,6 +138,18 @@ void
 VidaliaSettings::setRunTorAtStart(bool run)
 {
   setValue(SETTING_RUN_TOR_AT_START, run);
+}
+
+/** Return should we start tor or it is already runs? */
+bool VidaliaSettings::torIsAlreadyRunning() const
+{
+  value(SETTING_TOR_IS_ALREADY_RUNNING).toBool();
+}
+
+/** Set tor is already runs */
+void VidaliaSettings::setTorIsAlreadyRunning(bool running)
+{
+  setValue(SETTING_TOR_IS_ALREADY_RUNNING, running);
 }
 
 /** Returns true if Vidalia's main window should be visible when the

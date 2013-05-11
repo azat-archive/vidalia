@@ -133,8 +133,8 @@ MainWindow::MainWindow()
   createTrayIcon();
   /* Start with Tor initially stopped */
   _status = Unset;
-  _isVidaliaRunningTor = false;
-  updateTorStatus(Stopped);
+  _isVidaliaRunningTor = settings.torIsAlreadyRunning();
+  updateTorStatus(!_isVidaliaRunningTor ? Stopped : Started);
 
   /* Create a new TorControl object, used to communicate with Tor */
   _torControl = Vidalia::torControl();
@@ -913,6 +913,12 @@ MainWindow::updateTorStatus(TorStatus status)
   vNotice("Tor status changed from '%1' to '%2'.")
     .arg(toString(prevStatus)).arg(toString(status));
   _status = status;
+
+  VidaliaSettings settings;
+  if (status == Stopped && settings.torIsAlreadyRunning()) {
+    _isVidaliaRunningTor = true;
+    status = Started;
+  }
 
   if (status == Stopped) {
       statusText = tr("Tor is not running");

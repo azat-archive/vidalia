@@ -57,6 +57,11 @@ public:
   /** Set whether to run Tor when Vidalia starts. */
   void setRunTorAtStart(bool run);
 
+  /** Return should we start tor or it is already runs? */
+  bool torIsAlreadyRunning() const;
+  /** Set tor is already runs */
+  void setTorIsAlreadyRunning(bool running);
+
   /** Returns true if Vidalia's main window should be visible when the
    * application starts. */
   bool showMainWindowAtStart();
